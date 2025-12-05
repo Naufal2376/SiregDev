@@ -60,6 +60,11 @@ return [
             'report' => false,
         ],
 
+        'cloudinary' => [
+            'driver' => 'cloudinary',
+            'folder' => env('CLOUDINARY_FOLDER', 'siregdev_uploads'), // Opsional: nama folder di cloud
+        ],
+
     ],
 
     /*
