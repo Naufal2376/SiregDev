@@ -26,6 +26,7 @@ if (!is_dir($storagePath)) {
     // Buat ulang struktur folder penting di dalam /tmp
     $folders = [
         '/app/public',
+        '/app/livewire-tmp',
         '/framework/cache/data',
         '/framework/views',
         '/framework/sessions',
