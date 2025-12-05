@@ -20,6 +20,8 @@ class CertificateResource extends Resource
 
     protected static ?string $pluralLabel = 'Sertifikat';
 
+    protected static bool $isGloballySearchable = false;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -68,6 +70,8 @@ class CertificateResource extends Resource
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->label('Pemilik')
+                    ->searchable()
+                    ->preload(false)
                     ->required()
                     ->default(fn () => auth()->id())
                     ->hidden(fn () => (int) (auth()->user()?->role ?? 1) !== 0),
@@ -126,7 +130,7 @@ class CertificateResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['user']);
 
         $user = auth()->user();
 

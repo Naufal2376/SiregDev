@@ -85,6 +85,8 @@ class ProjectResource extends Resource
                         Forms\Components\Select::make('owner_user_id')
                             ->relationship('owner', 'name')
                             ->label('Owner')
+                            ->searchable()
+                            ->preload()
                             ->required()
                             ->default(fn () => auth()->id())
                             ->hidden(fn () => (int) (auth()->user()?->role ?? 1) !== 0),
@@ -132,7 +134,7 @@ class ProjectResource extends Resource
 
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
-        $query = parent::getEloquentQuery();
+        $query = parent::getEloquentQuery()->with(['owner']);
 
         $user = auth()->user();
 
@@ -140,12 +142,10 @@ class ProjectResource extends Resource
             return $query->whereRaw('1 = 0');
         }
 
-        // Superadmin (role 0) sees all projects
         if ((int) ($user->role ?? -1) === 0) {
             return $query;
         }
 
-        // Admins 1-7 see only their own projects
         return $query->where('owner_user_id', $user->id);
     }
 }
