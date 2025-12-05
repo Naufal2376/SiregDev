@@ -2,6 +2,7 @@ import React from "react";
 import "./bootstrap";
 import { createRoot } from "react-dom/client";
 import { createInertiaApp } from "@inertiajs/react";
+import { Analytics } from "@vercel/analytics/react";
 
 createInertiaApp({
     resolve: (name) => {
@@ -10,6 +11,11 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         const root = createRoot(el);
-        root.render(<App {...props} />);
+        root.render(
+            <>
+                <App {...props} />
+                <Analytics />
+            </>
+        );
     },
 });
